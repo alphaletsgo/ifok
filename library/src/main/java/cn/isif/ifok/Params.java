@@ -2,6 +2,9 @@ package cn.isif.ifok;
 
 import android.text.TextUtils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,9 +55,18 @@ public class Params {
             builder.setType(MultipartBody.FORM);
             //处理参数
             if (isJson) {
-                String jsonBody = GsonUtil.GsonString(params);
-                if (!StringUtils.isEmpty(jsonBody)) {
-                    builder.addPart(RequestBody.create(Constants.JSON, jsonBody));
+                String json;
+                JSONObject jsonObject = new JSONObject();
+                for (Part part : params) {
+                    try {
+                        jsonObject.put(part._key, part._value);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                json = jsonObject.toString();
+                if (!StringUtils.isEmpty(json)) {
+                    builder.addPart(RequestBody.create(Constants.JSON, json));
                     hasData = true;
                 }
             } else {
@@ -83,10 +95,18 @@ public class Params {
 
         } else {
             if (isJson) {
-                String jsonBody = GsonUtil.GsonString(params);
-                if (!StringUtils.isEmpty(jsonBody)) {
-                    body = RequestBody.create(Constants.JSON, jsonBody);
-                    ;
+                String json;
+                JSONObject jsonObject = new JSONObject();
+                for (Part part : params) {
+                    try {
+                        jsonObject.put(part._key, part._value);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                json = jsonObject.toString();
+                if (!StringUtils.isEmpty(json)) {
+                    body = RequestBody.create(Constants.JSON, json);
                 }
             } else {
                 FormBody.Builder builder = new FormBody.Builder();
