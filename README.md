@@ -1,6 +1,6 @@
 # ifok
 
-> 这是一个基于okhttp封装的库，restful设计，用于快速开发，使用灵活，可用于各种android项目！
+> 基于okhttp库封装，RESTful设计，使用灵活，可快速用于各种android项目！
 
 ##使用
 
@@ -12,8 +12,8 @@ compile 'cn.isif.plug.ifok:library:1.0.2'
 **post请求**
 ```java
   public static final String tag = "test";//定义一个标识，用于取消任务
-  String url = "https://mostring.com/"
-  Params builder = new Params.Builder().json().build();
+  String url = "https://mostring.com/";
+  Params builder = new Params.Builder().json().build();
   params.put("protocolVersion", "2.0.0");
   IfOk.getInstance().post(url, params, new CallBack() {
             @Override
