@@ -332,6 +332,10 @@ public class Params {
         this.putParamsTrunk(key, String.valueOf(value));
     }
 
+    public void put(String key, long value) {
+        this.putParamsTrunk(key, String.valueOf(value));
+    }
+
     public void put(List<Part> params) {
         this.params.addAll(params);
     }
