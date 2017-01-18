@@ -150,7 +150,7 @@ public class IfOk {
      * @param destFileDir 本地文件存储的文件夹
      * @param callback
      */
-    public void download(final String url, final String destFileDir, final CallBack callback, Object tag) {
+    public void download(final String url, final String destFileDir, final CallBack callback, final Object tag) {
         final Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -159,7 +159,7 @@ public class IfOk {
         call.enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                sendOnFailedCallBack(url, callback, e);
+                sendOnFailedCallBack(url, callback, e, tag);
             }
 
             @Override
@@ -177,9 +177,9 @@ public class IfOk {
                     }
                     fos.flush();
                     //如果下载文件成功，第一个参数为文件的绝对路径
-                    sendOnSuccessCallBack(url, callback, file.getAbsolutePath());
+                    sendOnSuccessCallBack(url, callback, file.getAbsolutePath(), tag);
                 } catch (IOException e) {
-                    sendOnFailedCallBack(url, callback, e);
+                    sendOnFailedCallBack(url, callback, e, tag);
                 } finally {
                     try {
                         if (is != null) is.close();
@@ -204,7 +204,7 @@ public class IfOk {
      * @param callBack
      * @param urlEncoder
      */
-    public void methodExecuteTrunk(Method method, final String url, Params params, final CallBack callBack, boolean urlEncoder, Object tag) {
+    public void methodExecuteTrunk(Method method, final String url, Params params, final CallBack callBack, boolean urlEncoder, final Object tag) {
         Request.Builder builder = new Request.Builder();
         Headers headers = null;
         RequestBody body = null;
@@ -247,17 +247,17 @@ public class IfOk {
         call.enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(Call call, final IOException e) {
-                sendOnFailedCallBack(url, callBack, e);
+                sendOnFailedCallBack(url, callBack, e, tag);
             }
 
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
                 if (!response.isSuccessful()) {
                     Exception e = new Exception("Unexpected code " + response);
-                    sendOnFailedCallBack(url, callBack, e);
+                    sendOnFailedCallBack(url, callBack, e, tag);
                 } else {
                     try {
-                        sendOnSuccessCallBack(url, callBack, response.body().string());
+                        sendOnSuccessCallBack(url, callBack, response.body().string(), tag);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -274,7 +274,7 @@ public class IfOk {
     public void cancel(Object tag) {
         if (tag != null) {
             Call call = RequestManager.getInstance().getCall(tag);
-            if (call != null) {
+            if (call != null && !call.isCanceled()) {
                 call.cancel();
             }
             RequestManager.getInstance().removeCall(tag);
@@ -306,12 +306,12 @@ public class IfOk {
      * @param callBack
      * @param e
      */
-    public void sendOnFailedCallBack(final String url, final CallBack callBack, final Exception e) {
+    public void sendOnFailedCallBack(final String url, final CallBack callBack, final Exception e, final Object tag) {
         if (callBack == null) return;
         mDelivery.post(new Runnable() {
             @Override
             public void run() {
-                RequestManager.getInstance().removeCall(url);
+                RequestManager.getInstance().removeCall(tag);
                 callBack.onFail(e);
             }
         });
@@ -323,12 +323,12 @@ public class IfOk {
      * @param callBack
      * @param object
      */
-    public void sendOnSuccessCallBack(final String url, final CallBack callBack, final Object object) {
+    public void sendOnSuccessCallBack(final String url, final CallBack callBack, final Object object, final Object tag) {
         if (callBack == null) return;
         mDelivery.post(new Runnable() {
             @Override
             public void run() {
-                RequestManager.getInstance().removeCall(url);
+                RequestManager.getInstance().removeCall(tag);
                 callBack.onSuccess(object);
             }
         });

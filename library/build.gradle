@@ -32,7 +32,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     testCompile 'junit:junit:4.12'
-    compile 'com.squareup.okhttp3:okhttp:3.1.2'
+    compile 'com.squareup.okhttp3:okhttp:3.5.0'
     compile 'com.google.code.gson:gson:2.6.1'
     compile 'cn.isif.alibs:alibs:1.0.3'
 }
@@ -42,7 +42,7 @@ def siteUrl = 'https://github.com/yieryi/ifok'
 def gitUrl = 'https://github.com/yieryi/ifok.git'
 
 group = 'cn.isif.plug.ifok'
-version = '1.0.3'
+version = '1.0.6'
 
 //配置source jar的生成
 task sourcesJar(type: Jar) {
