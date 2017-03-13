@@ -274,7 +274,7 @@ public class IfOk {
     public void cancel(Object tag) {
         if (tag != null) {
             Call call = RequestManager.getInstance().getCall(tag);
-            if (call != null && !call.isCanceled()) {
+            if (call != null && !call.isCanceled() && !call.isExecuted()) {
                 call.cancel();
             }
             RequestManager.getInstance().removeCall(tag);
