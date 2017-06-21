@@ -1,4 +1,4 @@
-package cn.isif.ifok;
+package cn.isif;
 
 import org.junit.Test;
 
