@@ -6,16 +6,15 @@
 
 **导入项目**
 ```
-compile 'cn.isif.plug.ifok:library:1.0.2'
+compile 'cn.isif.plug.ifok:library:2.0.0'
 ```
 
 **post请求**
 ```java
-  public static final String tag = "test";//定义一个标识，用于取消任务
   String url = "https://mostring.com/";
   Params builder = new Params.Builder().json().build();
   params.put("protocolVersion", "2.0.0");
-  IfOk.getInstance().post(url, params, new CallBack() {
+  Call call = IfOk.getInstance().post(url, params, new CallBack() {
             @Override
             public void onStart(Request request) {
                 
@@ -35,9 +34,9 @@ compile 'cn.isif.plug.ifok:library:1.0.2'
             public void updateProgress(int progress, long networkSpeed, boolean done) {
 
             }
-        }, tag);
+        });
 ```
 **取消请求**
 ```java
-IfOk.getInstance().cancel(tag);
+call.cancel();
 ```

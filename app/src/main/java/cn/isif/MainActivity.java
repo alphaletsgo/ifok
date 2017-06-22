@@ -2,8 +2,8 @@ package cn.isif;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 
 import cn.isif.ifok.CallBack;
@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSuccess(Object object) {
-                Log.d(TAG,object.toString());
+                Toast.makeText(MainActivity.this,object.toString(),Toast.LENGTH_LONG).show();
             }
 
             @Override
