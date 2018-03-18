@@ -6,7 +6,7 @@
 
 **导入项目**
 ```
-compile 'cn.isif.plug.ifok:library:2.0.0'
+compile 'cn.isif.plug.ifok:library:2.0.1'
 ```
 
 **post请求**
