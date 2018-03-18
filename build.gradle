@@ -3,11 +3,12 @@
 buildscript {
     repositories {
         jcenter()
+        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
+        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -16,9 +17,29 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        google()
     }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+ext {
+    // Sdk and tools
+    compile_sdk_version = 26
+    build_tools_version = '26.0.0'
+    min_sdk_version = 14
+    target_sdk_version = 26
+
+    version_code = 1_013_004
+    version_name = '2.0.1'// E.g 1.9.72 => 1,009,072
+
+    // App dependencies
+    support_version = '26.1.0'
+    junit_version = '4.12'
+
+    //publish info
+    siteUrl = 'https://github.com/yieryi/ifok'
+    gitUrl = 'https://github.com/yieryi/ifok.git'
+
 }

@@ -27,7 +27,7 @@ public class RequestManager {
     }
 
     public void addCall(Object tag, Call call) {
-        if (!callMap.contains(tag)){
+        if (!callMap.contains(tag)) {
             callMap.put(tag, call);
         }
     }

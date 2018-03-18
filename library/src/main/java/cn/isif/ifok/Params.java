@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.isif.alibs.utils.StringUtils;
-import cn.isif.ifok.utils.GsonUtil;
 import okhttp3.FormBody;
 import okhttp3.Headers;
 import okhttp3.MediaType;

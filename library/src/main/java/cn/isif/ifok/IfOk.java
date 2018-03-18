@@ -239,7 +239,7 @@ public class IfOk {
                 break;
         }
         builder.url(url);
-        if (headers!=null){
+        if (headers != null) {
             builder.headers(headers);
         }
         Request request = builder.build();

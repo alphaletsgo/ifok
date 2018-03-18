@@ -14,10 +14,12 @@ public class Part {
         this._key = _key;
         this._value = _value;
     }
+
     public Part(String key, FileWrapper fileWrapper) {
         this._key = key;
         this.fileWrapper = fileWrapper;
     }
+
     public Part(String key, FileBytes fileBytes) {
         this._key = key;
         this.fileBytes = fileBytes;

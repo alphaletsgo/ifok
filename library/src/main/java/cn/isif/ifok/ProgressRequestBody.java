@@ -110,7 +110,7 @@ public class ProgressRequestBody extends RequestBody {
                     long networkSpeed = bytesWritten / totalTime;
                     int progress = (int) (bytesWritten * 100 / contentLength);
                     boolean done = bytesWritten == contentLength;
-                    ifOk.onProgressUpgrade(callBack,progress, networkSpeed, done ? true : false);
+                    ifOk.onProgressUpgrade(callBack, progress, networkSpeed, done ? true : false);
                 }
             }
         };
