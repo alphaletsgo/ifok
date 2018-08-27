@@ -83,3 +83,5 @@ install {
         }
     }
 }
+//./gradlew install
+//./gradlew bintrayUpload

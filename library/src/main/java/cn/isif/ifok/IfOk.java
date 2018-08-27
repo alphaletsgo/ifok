@@ -22,11 +22,12 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 /**
  * Created by zh on 16/2/22.
  */
-public class IfOk {
+public class IfOk implements StatusListener{
     private OkHttpClient client;
     private volatile static IfOk ifOk;
     private Handler mDelivery;
@@ -167,7 +168,8 @@ public class IfOk {
                 int len = 0;
                 FileOutputStream fos = null;
                 try {
-                    is = response.body().byteStream();
+                    ResponseBody responseBody = new ProgressResponseBody(response.body(),IfOk.this,callback);//包装进度
+                    is = responseBody.byteStream();
                     File file = new File(destFileDir, FileUtils.getFileName(url));
                     fos = new FileOutputStream(file);
                     while ((len = is.read(buf)) != -1) {
@@ -220,19 +222,19 @@ public class IfOk {
             case POST:
                 body = params.getRequestBody();
                 if (body != null) {
-                    builder.post(body);
+                    builder.post(new ProgressRequestBody(body,this,callBack));
                 }
                 break;
             case PUT:
                 body = params.getRequestBody();
                 if (body != null) {
-                    builder.put(body);
+                    builder.put(new ProgressRequestBody(body,this,callBack));
                 }
                 break;
             case DELETE:
                 body = params.getRequestBody();
                 if (body != null) {
-                    builder.delete(body);
+                    builder.delete(new ProgressRequestBody(body,this,callBack));
                 }
                 break;
             default:

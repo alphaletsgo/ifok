@@ -12,28 +12,29 @@ import okio.Okio;
 import okio.Sink;
 
 /**
- * 进度处理
+ * 该类包装了RequestBoy类，用于处理上传进度
  */
 public class ProgressRequestBody extends RequestBody {
     //实际的待包装请求体
     private final RequestBody requestBody;
     //进度回调接口
-    private final IfOk ifOk;
     //包装完成的BufferedSink
     private BufferedSink bufferedSink;
     //开始时间，用户计算加载速度
     private long previousTime;
     private final CallBack callBack;
+    private StatusListener statusListener;
 
     /**
      * 构造函数，赋值
      *
      * @param requestBody 待包装的请求体
-     * @param ifOk
+     * @param statusListener
+     * @param callBack
      */
-    public ProgressRequestBody(RequestBody requestBody, IfOk ifOk, CallBack callBack) {
+    public ProgressRequestBody(RequestBody requestBody, StatusListener statusListener,CallBack callBack) {
         this.requestBody = requestBody;
-        this.ifOk = ifOk;
+        this.statusListener = statusListener;
         this.callBack = callBack;
     }
 
@@ -101,7 +102,7 @@ public class ProgressRequestBody extends RequestBody {
                 bytesWritten += byteCount;
 
                 //回调
-                if (ifOk != null) {
+                if (statusListener != null) {
                     //计算速度
                     long totalTime = (System.currentTimeMillis() - previousTime) / 1000;
                     if (totalTime == 0) {
@@ -110,7 +111,7 @@ public class ProgressRequestBody extends RequestBody {
                     long networkSpeed = bytesWritten / totalTime;
                     int progress = (int) (bytesWritten * 100 / contentLength);
                     boolean done = bytesWritten == contentLength;
-                    ifOk.onProgressUpgrade(callBack, progress, networkSpeed, done ? true : false);
+                    statusListener.onProgressUpgrade(callBack, progress, networkSpeed, done ? true : false);
                 }
             }
         };
