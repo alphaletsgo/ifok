@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,9 +14,17 @@ import android.widget.Toast;
 
 
 import java.io.File;
+import java.security.SecureRandom;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+
+import cn.isif.alibs.utils.ALibs;
+import cn.isif.alibs.utils.ALog;
 import cn.isif.ifok.CallBack;
 import cn.isif.ifok.IfOk;
+import cn.isif.ifok.OkConfig;
 import cn.isif.ifok.Params;
 import okhttp3.Call;
 import okhttp3.Request;
@@ -30,8 +39,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ALibs.init(this.getApplicationContext());
         textView = (TextView) findViewById(R.id.progress);
         checkDepPermission();
+
+        OkConfig.Builder builder = new OkConfig.Builder()
+                .setSSLSocketFactory(createSSLSocketFactory())
+                .setHostnameVerifier(new TrustAllHostnameVerifier())
+                .set
+                .setTimeout(1000 * 60);
+
+        IfOk.getInstance().init(builder.build());
+
     }
 
 
@@ -65,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFail(Exception e) {
-
+                Log.d(TAG,e.getMessage());
             }
 
             @Override
@@ -81,9 +100,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void downloadFile(View view) {
-
-        String file = "https://timesofoman.com/uploads/images/2017/09/13/734320.jpg";
-        IfOk.getInstance().download(file, "sdcard/", new CallBack() {
+        final String path = getAppRootDirectory() + "weiboyi.apk";
+        ALog.d(path);
+        String file = "https://192.168.100.151/fred/bin/george/default_channel/weiboyi.apk";
+        final String fileDir = new File(path).getParentFile().getAbsolutePath();
+        ALog.d(fileDir);
+        IfOk.getInstance().download(file, fileDir, new CallBack() {
             @Override
             public void onStart(Request request) {
 
@@ -91,21 +113,46 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFail(Exception e) {
-                Log.d(TAG, e.getMessage());
+                ALog.d(e.getMessage());
             }
 
             @Override
             public void onSuccess(Object object) {
-
+                try {
+                    OpenFileUtil.openFile(MainActivity.this, new File(path));
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void updateProgress(int progress, long networkSpeed, boolean done) {
-                textView.setText(progress+"---"+networkSpeed);
+                textView.setText("" + progress+"---"+networkSpeed);
             }
         });
 
     }
+    private String getAppRootDirectory() {
+        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "temp" + File.separator;
+        File fileDir = new File(path);
+        if (!fileDir.exists()) {
+            fileDir.mkdirs();
+        }
+        return path;
+    }
 
+    private static SSLSocketFactory createSSLSocketFactory() {
+        SSLSocketFactory ssfFactory = null;
+
+        try {
+            SSLContext sc = SSLContext.getInstance("TLS");
+            sc.init(null,  new TrustManager[] { new TrustAllCerts() }, new SecureRandom());
+
+            ssfFactory = sc.getSocketFactory();
+        } catch (Exception e) {
+        }
+
+        return ssfFactory;
+    }
 
 }

@@ -348,6 +348,10 @@ public class Params {
         return params;
     }
 
+    public boolean hasAttach() {
+        return files.size() > 0 ? true : false;
+    }
+
     public int size() {
         return this.params.size();
     }

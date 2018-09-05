@@ -30,7 +30,8 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
-    //    compile 'cn.isif.plug.ifok:library:2.0.0'
+//        compile 'cn.isif.plug.ifok:library:2.1.0'
+    implementation 'cn.isif.alibs:alibs:2.0.0'
     api project(':library')
     implementation 'com.squareup.okhttp3:okhttp:3.5.0'
     implementation 'com.google.code.gson:gson:2.6.1'
