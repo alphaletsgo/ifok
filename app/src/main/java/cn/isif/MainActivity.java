@@ -28,6 +28,7 @@ import cn.isif.ifok.OkConfig;
 import cn.isif.ifok.Params;
 import okhttp3.Call;
 import okhttp3.Request;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
     public String TAG = "MainActivity";
@@ -46,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
         OkConfig.Builder builder = new OkConfig.Builder()
                 .setSSLSocketFactory(createSSLSocketFactory())
                 .setHostnameVerifier(new TrustAllHostnameVerifier())
-                .set
                 .setTimeout(1000 * 60);
 
         IfOk.getInstance().init(builder.build());
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFail(Exception e) {
+            public void onFail(Exception e, Response response) {
                 Log.d(TAG,e.getMessage());
             }
 
@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFail(Exception e) {
+            public void onFail(Exception e, Response response) {
                 ALog.d(e.getMessage());
             }
 

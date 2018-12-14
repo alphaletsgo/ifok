@@ -121,11 +121,8 @@ public class OpenFileUtil {
 
         //获取文件file的MIME类型
         String type = OpenFileUtil.getMIMEType(file);
-
-        //判断是否是AndroidN以及更高的版本
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            // VIP 重要
             Uri contentUri = FileProvider.getUriForFile(context, "cn.isif.fileProvider", file);
             ALog.d(" > N :s"+contentUri.getPath());
             intent.setDataAndType(contentUri, type);
@@ -137,7 +134,6 @@ public class OpenFileUtil {
         }
 
         intent.setAction(Intent.ACTION_VIEW);
-        //跳转
         try {
             context.startActivity(intent);
         } catch (Exception e) {

@@ -1,6 +1,7 @@
 package cn.isif.ifok;
 
 import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by he on 2018/8/27.
@@ -21,7 +22,7 @@ public interface StatusListener {
      * @param callBack
      * @param e
      */
-    void sendOnFailedCallBack(final String url, final CallBack callBack, final Exception e);
+    void sendOnFailedCallBack(final String url, final CallBack callBack, final Exception e, final Response response);
 
     /**
      * callBack--- onSuccess

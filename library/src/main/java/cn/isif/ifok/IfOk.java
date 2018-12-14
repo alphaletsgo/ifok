@@ -158,7 +158,7 @@ public class IfOk implements StatusListener {
         call.enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                sendOnFailedCallBack(url, callback, e);
+                sendOnFailedCallBack(url, callback, e,null);
             }
 
             @Override
@@ -179,7 +179,7 @@ public class IfOk implements StatusListener {
                     //如果下载文件成功，第一个参数为文件的绝对路径
                     sendOnSuccessCallBack(url, callback, file.getAbsolutePath());
                 } catch (IOException e) {
-                    sendOnFailedCallBack(url, callback, e);
+                    sendOnFailedCallBack(url, callback, e,response);
                 } finally {
                     try {
                         if (is != null) is.close();
@@ -250,14 +250,14 @@ public class IfOk implements StatusListener {
         call.enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(Call call, final IOException e) {
-                sendOnFailedCallBack(url, callBack, e);
+                sendOnFailedCallBack(url, callBack, e, null);
             }
 
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
                 if (!response.isSuccessful()) {
                     Exception e = new Exception("Unexpected code " + response);
-                    sendOnFailedCallBack(url, callBack, e);
+                    sendOnFailedCallBack(url, callBack, e,response);
                 } else {
                     try {
                         sendOnSuccessCallBack(url, callBack, response.body().string());
@@ -294,12 +294,12 @@ public class IfOk implements StatusListener {
      * @param callBack
      * @param e
      */
-    public void sendOnFailedCallBack(final String url, final CallBack callBack, final Exception e) {
+    public void sendOnFailedCallBack(final String url, final CallBack callBack, final Exception e, final Response response) {
         if (callBack == null) return;
         mDelivery.post(new Runnable() {
             @Override
             public void run() {
-                callBack.onFail(e);
+                callBack.onFail(e,response);
             }
         });
     }
