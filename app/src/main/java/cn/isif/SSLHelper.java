@@ -21,6 +21,7 @@ public class SSLHelper {
         SSLSocketFactory ssfFactory = null;
 
         try {
+            //需要与服务器保持一致，如果服务器是ssl，这里必须是ssl
             SSLContext sc = SSLContext.getInstance("TLS");
             sc.init(null, new TrustManager[]{new TrustAllCerts()}, new SecureRandom());
 
